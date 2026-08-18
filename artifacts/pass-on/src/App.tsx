@@ -83,7 +83,7 @@ function Login() {
             <PassOnMark />
             <span className="mt-12 inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/[.08] px-3 py-1.5 font-mono text-[10px] uppercase tracking-[.18em] text-primary">
               <span className="size-1.5 rounded-full bg-primary" />
-              espaço do aluno INA
+              espaço do aluno
             </span>
             <h1 className="mt-7 max-w-[510px] text-[clamp(3rem,5vw,5.3rem)] font-extrabold leading-[.96] tracking-[-.07em] text-balance text-foreground">
               Seu próximo
@@ -119,16 +119,16 @@ function Login() {
               </div>
             </div>
           </div>
-          <p className="relative z-10 mt-8 font-mono text-[10px] uppercase tracking-[.16em] text-muted-foreground/60">INA · formação que move</p>
+          <p className="relative z-10 mt-8 max-w-[250px] font-mono text-[10px] uppercase tracking-[.12em] text-muted-foreground/60">E. E. República do Suriname</p>
         </section>
 
         <section className="flex min-h-[100dvh] flex-col px-5 py-6 sm:px-10 sm:py-9 lg:px-16 xl:px-24">
           <div className="flex items-center justify-between lg:justify-end">
             <div className="lg:hidden"><PassOnMark /></div>
             <div className="flex items-center gap-2 text-xs text-muted-foreground">
-              <span className="hidden sm:inline">Ainda não conhece o INA?</span>
-              <button type="button" className="focus-lilac rounded-md px-1 font-semibold text-primary transition-colors hover:text-accent" data-testid="button-discover-ina" onClick={() => setRecoverySent(true)}>
-                Conheça o INA
+              <span className="hidden sm:inline">Você estuda na E. E. República do Suriname?</span>
+              <button type="button" className="focus-lilac rounded-md px-1 font-semibold text-primary transition-colors hover:text-accent" data-testid="button-discover-school" onClick={() => setRecoverySent(true)}>
+                Conheça a escola
               </button>
             </div>
           </div>
@@ -181,7 +181,7 @@ function Login() {
               {recoverySent && (
                 <div className="flex items-start gap-2.5 rounded-2xl border border-primary/25 bg-primary/[.08] px-4 py-3 text-xs leading-5 text-primary animate-rise" role="status" data-testid="status-login-recovery">
                   <Check className="mt-0.5 size-4 shrink-0" />
-                  <span>Este é um link demonstrativo. Em breve, o suporte do INA poderá ajudar por aqui.</span>
+                  <span>Este é um link demonstrativo. Em breve, a equipe da escola poderá ajudar por aqui.</span>
                 </div>
               )}
 
@@ -200,7 +200,7 @@ function Login() {
               <span>Ambiente demonstrativo · seus dados não são enviados para nenhum serviço.</span>
             </div>
           </div>
-          <p className="text-center font-mono text-[10px] uppercase tracking-[.14em] text-muted-foreground/50 lg:text-left">© 2025 Pass On · INA</p>
+          <p className="text-center font-mono text-[10px] uppercase tracking-[.12em] text-muted-foreground/50 lg:text-left">© 2025 Pass On · E. E. República do Suriname</p>
         </section>
       </div>
     </main>
@@ -238,7 +238,7 @@ type Listing = {
 };
 
 const saleListings: Listing[] = [
-  { id: 'jaqueta-ina', title: 'Jaqueta oficial INA', category: 'Roupas', condition: 'Muito bom estado', seller: 'Bia R.', price: 'R$ 48', note: 'tam. M · retirada no campus', icon: Shirt, color: 'from-[#6d4ac1] to-[#2d1f55]' },
+  { id: 'jaqueta-escola', title: 'Jaqueta oficial da escola', category: 'Roupas', condition: 'Muito bom estado', seller: 'Bia R.', price: 'R$ 48', note: 'tam. M · retirada no campus', icon: Shirt, color: 'from-[#6d4ac1] to-[#2d1f55]' },
   { id: 'mochila-azul', title: 'Mochila azul-marinho', category: 'Mochilas', condition: 'Bom estado', seller: 'Lucas T.', price: 'R$ 35', note: '3 compartimentos', icon: Backpack, color: 'from-[#3d5a80] to-[#1b263b]' },
   { id: 'estojo-lilas', title: 'Estojo lilás estruturado', category: 'Estojos', condition: 'Como novo', seller: 'Nina S.', price: 'R$ 22', note: 'pouco uso · zíper em perfeito estado', icon: PackageOpen, color: 'from-[#9e78d4] to-[#513d74]' },
   { id: 'relogio-digital', title: 'Relógio digital preto', category: 'Acessórios', condition: 'Bom estado', seller: 'Caio M.', price: 'R$ 18', note: 'pulseira ajustável', icon: Watch, color: 'from-[#574f72] to-[#242039]' },
@@ -266,7 +266,7 @@ function MarketplaceShell({ children }: { children: ReactNode }) {
         <aside className="hidden w-[252px] shrink-0 flex-col border-r border-border/70 bg-sidebar px-5 py-7 md:flex" data-testid="sidebar-navigation">
           <Link href="/inicio" className="focus-lilac w-fit" data-testid="link-brand-home"><PassOnMark /></Link>
           <div className="mt-14 px-3">
-            <p className="font-mono text-[10px] uppercase tracking-[.18em] text-muted-foreground/60">comunidade INA</p>
+            <p className="font-mono text-[10px] uppercase tracking-[.18em] text-muted-foreground/60">comunidade escolar</p>
             <nav className="mt-4 space-y-1" aria-label="Navegação principal">
               {marketplaceNav.map(({ path, key, label, icon: Icon }) => (
                 <Link
@@ -314,11 +314,11 @@ function MarketplaceShell({ children }: { children: ReactNode }) {
               <span className="block rounded-xl border border-border/70 bg-card py-2.5 pl-9 pr-3 text-xs text-muted-foreground/60" data-testid="text-search-placeholder">Buscar no Pass On</span>
             </div>
             <div className="relative flex items-center gap-3">
-              <span className="hidden text-right sm:block"><span className="block text-xs font-bold text-foreground">Olá, Marina</span><span className="block font-mono text-[9px] uppercase tracking-wider text-muted-foreground">comunidade INA</span></span>
+              <span className="hidden text-right sm:block"><span className="block text-xs font-bold text-foreground">Olá, Marina</span><span className="block font-mono text-[9px] uppercase tracking-wider text-muted-foreground">E. E. República do Suriname</span></span>
               <button type="button" aria-label="Abrir perfil" className="focus-lilac grid size-9 place-items-center rounded-full bg-accent text-xs font-extrabold text-background transition-transform hover:scale-105" onClick={() => setProfileOpen((open) => !open)} data-testid="button-profile">MC</button>
               {profileOpen && (
                 <div className="absolute right-0 top-12 z-20 w-48 rounded-2xl border border-border bg-card p-2 shadow-2xl animate-rise" data-testid="menu-profile">
-                  <div className="px-3 py-2"><p className="text-xs font-bold text-foreground">Marina Costa</p><p className="mt-1 text-[10px] text-muted-foreground">Aluno INA · RA 2025.0148</p></div>
+                  <div className="px-3 py-2"><p className="text-xs font-bold text-foreground">Marina Costa</p><p className="mt-1 text-[10px] text-muted-foreground">Aluna · RA 2025.0148</p></div>
                   <button type="button" onClick={signOut} className="focus-lilac flex w-full items-center gap-2 rounded-xl px-3 py-2.5 text-left text-xs font-bold text-muted-foreground transition-colors hover:bg-secondary hover:text-destructive" data-testid="button-profile-logout"><LogOut className="size-3.5" /> Sair</button>
                 </div>
               )}
@@ -365,9 +365,9 @@ function HomeContent() {
         <div className="absolute -right-28 -top-36 size-[390px] rounded-full border border-primary/20 animate-ring" />
         <div className="absolute -bottom-48 right-28 size-[330px] rounded-full border border-accent/10" />
         <div className="relative max-w-2xl">
-          <div className="flex items-center gap-2 text-primary"><span className="size-1.5 rounded-full bg-primary" /><p className="font-mono text-[10px] uppercase tracking-[.18em]">mercado INA · só entre alunos</p></div>
+          <div className="flex items-center gap-2 text-primary"><span className="size-1.5 rounded-full bg-primary" /><p className="font-mono text-[10px] uppercase tracking-[.18em]">mercado escolar · só entre alunos</p></div>
           <h1 className="mt-5 text-[clamp(2.6rem,6vw,5.6rem)] font-extrabold leading-[.91] tracking-[-.085em] text-foreground">O que circula<br /><span className="text-primary">fica.</span></h1>
-          <p className="mt-6 max-w-[480px] text-sm leading-7 text-muted-foreground sm:text-[15px]">Encontre roupas e produtos escolares que fazem sentido para a sua rotina — vendidos ou doados por quem vive o INA com você.</p>
+          <p className="mt-6 max-w-[480px] text-sm leading-7 text-muted-foreground sm:text-[15px]">Encontre roupas e produtos escolares que fazem sentido para a sua rotina — vendidos ou doados por outros alunos da escola.</p>
           <div className="mt-8 flex flex-wrap gap-3">
             <Link href="/vendas" className="focus-lilac group inline-flex items-center gap-2 rounded-xl bg-primary px-4 py-3 text-xs font-extrabold text-primary-foreground transition-all hover:-translate-y-0.5 hover:bg-accent" data-testid="link-hero-vendas">Explorar vendas <ArrowRight className="size-4 transition-transform group-hover:translate-x-1" /></Link>
             <Link href="/doacoes" className="focus-lilac inline-flex items-center gap-2 rounded-xl border border-border bg-secondary/50 px-4 py-3 text-xs font-extrabold text-foreground transition-colors hover:border-primary/40 hover:bg-secondary" data-testid="link-hero-doacoes">Ver doações</Link>
@@ -447,7 +447,7 @@ function ListingCard({ item, type }: { item: Listing; type: 'sales' | 'donations
         <div className="flex items-start justify-between gap-3"><h3 className="text-[15px] font-extrabold leading-tight tracking-[-.035em] text-foreground" data-testid={`text-listing-title-${item.id}`}>{item.title}</h3><button type="button" aria-label={`Favoritar ${item.title}`} className="focus-lilac shrink-0 rounded-lg p-1.5 text-muted-foreground transition-colors hover:bg-secondary hover:text-accent" data-testid={`button-favorite-${item.id}`}><Heart className="size-4" /></button></div>
         <div className="mt-3 flex items-center gap-2 text-[11px] text-muted-foreground"><span className="grid size-5 place-items-center rounded-full bg-secondary text-[8px] font-extrabold text-primary">{item.seller.split(' ').map((part) => part[0]).join('')}</span><span data-testid={`text-listing-seller-${item.id}`}>{item.seller}</span><span className="text-border">·</span><span data-testid={`text-listing-condition-${item.id}`}>{item.condition}</span></div>
         <p className="mt-3 text-[11px] leading-5 text-muted-foreground" data-testid={`text-listing-note-${item.id}`}>{item.note}</p>
-        <div className="mt-5 flex items-end justify-between gap-3 border-t border-border/70 pt-4"><div><p className="font-mono text-[9px] uppercase tracking-[.12em] text-muted-foreground">{type === 'sales' ? 'valor combinado' : 'disponibilidade'}</p><p className={`mt-1 text-lg font-extrabold tracking-[-.05em] ${type === 'donations' ? 'text-accent' : 'text-foreground'}`} data-testid={`text-listing-price-${item.id}`}>{item.price}</p></div><span className="inline-flex items-center gap-1 rounded-lg bg-secondary px-2 py-1.5 text-[10px] font-bold text-muted-foreground"><BadgeCheck className="size-3 text-primary" /> INA</span></div>
+        <div className="mt-5 flex items-end justify-between gap-3 border-t border-border/70 pt-4"><div><p className="font-mono text-[9px] uppercase tracking-[.12em] text-muted-foreground">{type === 'sales' ? 'valor combinado' : 'disponibilidade'}</p><p className={`mt-1 text-lg font-extrabold tracking-[-.05em] ${type === 'donations' ? 'text-accent' : 'text-foreground'}`} data-testid={`text-listing-price-${item.id}`}>{item.price}</p></div><span className="inline-flex items-center gap-1 rounded-lg bg-secondary px-2 py-1.5 text-[10px] font-bold text-muted-foreground"><BadgeCheck className="size-3 text-primary" /> escola</span></div>
       </div>
     </article>
   );
@@ -460,8 +460,8 @@ function ListingsPage({ type }: { type: 'sales' | 'donations' }) {
   return (
     <div className="animate-rise" data-testid={`page-${type}`}>
       <section className="flex flex-col justify-between gap-6 sm:flex-row sm:items-end">
-        <div><p className="flex items-center gap-2 font-mono text-[10px] uppercase tracking-[.18em] text-primary"><span className={`size-1.5 rounded-full ${isSales ? 'bg-primary' : 'bg-accent'}`} /> espaço do aluno INA</p><h1 className="mt-4 text-[clamp(2.6rem,6vw,4.6rem)] font-extrabold leading-[.9] tracking-[-.085em] text-foreground">{isSales ? 'Vendas' : 'Doações'}<span className="text-primary">.</span></h1><p className="mt-4 max-w-[510px] text-sm leading-6 text-muted-foreground">{isSales ? 'Itens de outros alunos, com preço claro e retirada combinada no campus.' : 'Coisas que ainda podem ser úteis para alguém da comunidade, sem custo.'}</p></div>
-        <div className="flex items-center gap-2 rounded-2xl border border-border bg-card px-4 py-3"><span className="grid size-8 place-items-center rounded-xl bg-secondary text-primary"><UserRound className="size-4" /></span><div><p className="text-[10px] uppercase tracking-[.12em] text-muted-foreground">ambiente</p><p className="text-xs font-extrabold text-foreground">somente INA</p></div></div>
+        <div><p className="flex items-center gap-2 font-mono text-[10px] uppercase tracking-[.18em] text-primary"><span className={`size-1.5 rounded-full ${isSales ? 'bg-primary' : 'bg-accent'}`} /> espaço do aluno</p><h1 className="mt-4 text-[clamp(2.6rem,6vw,4.6rem)] font-extrabold leading-[.9] tracking-[-.085em] text-foreground">{isSales ? 'Vendas' : 'Doações'}<span className="text-primary">.</span></h1><p className="mt-4 max-w-[510px] text-sm leading-6 text-muted-foreground">{isSales ? 'Itens de outros alunos, com preço claro e retirada combinada no campus.' : 'Coisas que ainda podem ser úteis para alguém da comunidade, sem custo.'}</p></div>
+        <div className="flex items-center gap-2 rounded-2xl border border-border bg-card px-4 py-3"><span className="grid size-8 place-items-center rounded-xl bg-secondary text-primary"><UserRound className="size-4" /></span><div><p className="text-[10px] uppercase tracking-[.12em] text-muted-foreground">ambiente</p><p className="text-xs font-extrabold text-foreground">somente alunos</p></div></div>
       </section>
       <section className="mt-9 rounded-2xl border border-border/70 bg-secondary/35 p-3 sm:p-4" data-testid="section-listing-filters"><div className="mb-3 flex items-center justify-between px-1"><p className="text-xs font-bold text-foreground">Explore por categoria</p><span className="font-mono text-[10px] text-muted-foreground">{items.length} {items.length === 1 ? 'item' : 'itens'}</span></div><CategoryFilters selected={selected} onSelect={setSelected} /></section>
       {items.length > 0 ? <section className="mt-6 grid gap-4 sm:grid-cols-2 xl:grid-cols-3" data-testid={`grid-listings-${type}`}>{items.map((item) => <ListingCard key={item.id} item={item} type={type} />)}</section> : <EmptyListings type={type} category={selected} />}
