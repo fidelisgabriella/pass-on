@@ -1,0 +1,28 @@
+kind = "web"
+previewPath = "/"
+title = "Pass On"
+description = "Aplicativo web para alunos do INA, começando por uma tela de login e uma área inicial do aluno com navegação simples e dados fictícios para demonstração."
+version = "1.0.0"
+id = "artifacts/pass-on"
+router = "path"
+
+[[services]]
+name = "web"
+paths = [ "/" ]
+localPort = 22428
+
+[services.development]
+run = "pnpm --filter @workspace/pass-on run dev"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/pass-on", "run", "build" ]
+serve = "static"
+publicDir = "artifacts/pass-on/dist/public"
+
+[[services.production.rewrites]]
+from = "/*"
+to = "/index.html"
+
+[services.env]
+PORT = "22428"
+BASE_PATH = "/"
