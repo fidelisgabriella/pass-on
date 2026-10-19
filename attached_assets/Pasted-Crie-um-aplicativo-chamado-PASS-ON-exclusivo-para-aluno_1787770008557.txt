@@ -1,0 +1,556 @@
+Crie um aplicativo chamado **PASS ON**, exclusivo para alunos da **E. E. República do Suriname**.
+
+O Pass On é uma plataforma escolar para alunos **venderem ou doarem roupas, mochilas, estojos e acessórios que não usam mais para outros alunos da escola**.
+
+O aplicativo deve ter aparência moderna, jovem, organizada e fácil de usar em celular e computador.
+
+## 1. IDENTIDADE VISUAL
+
+Nome do aplicativo: **Pass On**
+
+Cores principais:
+
+* Preto
+* Roxo
+
+Usar uma fonte arredondada, moderna e fácil de ler.
+
+O design deve ter:
+
+* Cards com bordas arredondadas
+* Botões modernos
+* Ícones simples
+* Espaçamento organizado
+* Visual jovem
+* Fundo claro com elementos em preto e roxo
+
+O aplicativo não deve parecer uma loja virtual genérica. Ele deve transmitir a ideia de **comunidade escolar, reutilização e sustentabilidade**.
+
+Não mostrar telas como:
+“Você estuda na E. E. República do Suriname?”
+“Conheça a escola”
+
+O usuário já está entrando em uma plataforma exclusiva da escola.
+
+---
+
+# 2. LOGIN
+
+Criar uma tela inicial de login.
+
+Título:
+
+**Pass On**
+
+Texto:
+
+**Compre, venda ou doe dentro da sua escola.**
+
+Campos:
+
+* RA
+* Senha
+
+Botão:
+
+**Entrar**
+
+Adicionar opção:
+
+**Ainda não tenho uma conta**
+
+Para criar uma conta, solicitar:
+
+* Nome
+* RA
+* Senha
+* Confirmar senha
+
+A conta deve ficar vinculada ao usuário.
+
+Depois do login, levar o usuário diretamente para a **Tela Inicial**.
+
+---
+
+# 3. TELA INICIAL
+
+Criar uma Home com:
+
+No topo:
+**Olá, [nome do aluno]! 💜**
+
+Barra de pesquisa:
+
+**Buscar roupas, mochilas, acessórios...**
+
+Criar dois botões principais:
+
+**Comprar**
+
+**Doar**
+
+Criar seção:
+
+### Categorias
+
+* 👕 Roupas
+* 🧥 Roupas de frio
+* 🎒 Mochilas e estojos
+* 🧢 Acessórios
+* 📦 Outros
+
+Criar seção:
+
+### Itens recentes
+
+Mostrar os anúncios publicados pelos alunos em cards.
+
+Cada card deve conter:
+
+* Foto real do produto
+* Nome
+* Categoria
+* Estado do produto
+* Preço, caso seja venda
+* “Grátis” ou “Doação”, caso seja doação
+* Botão de coração para favoritar
+
+Ao clicar no produto, abrir a página de detalhes.
+
+---
+
+# 4. PUBLICAR ITEM
+
+Criar uma tela chamada:
+
+**Publicar Item**
+
+Primeiro perguntar:
+
+### O que você deseja fazer?
+
+Botões:
+
+**Vender**
+
+**Doar**
+
+O botão escolhido deve ficar destacado em roxo.
+
+Depois mostrar:
+
+### Fotos do produto
+
+Permitir que o usuário:
+
+* Escolha fotos da galeria
+* Tire uma foto usando a câmera, quando disponível
+* Adicione até 5 fotos
+* Veja as fotos antes de publicar
+* Remova fotos
+* Escolha qual será a foto principal
+
+As fotos enviadas pelo usuário devem ser realmente armazenadas e vinculadas ao anúncio.
+
+Não substituir as fotos enviadas por imagens genéricas.
+
+Se nenhuma foto for adicionada, mostrar:
+
+**“Adicione pelo menos uma foto do item para continuar.”**
+
+---
+
+### Informações do produto
+
+Campo:
+
+**Nome do produto**
+
+Exemplo:
+“Moletom preto”
+
+Campo:
+
+**Categoria**
+
+Opções:
+
+* Roupas
+* Roupas de frio
+* Mochilas e estojos
+* Acessórios
+* Outros
+
+Campo:
+
+**Estado do produto**
+
+Opções:
+
+* Novo
+* Pouco usado
+* Usado
+* Precisa de cuidados
+
+Campo:
+
+**Descrição**
+
+Permitir que o aluno escreva detalhes sobre o produto.
+
+---
+
+### Preço
+
+Se o usuário escolher **Vender**, mostrar:
+
+**Preço**
+
+Valor em reais.
+
+Se escolher **Doar**, não mostrar preço.
+
+Mostrar:
+
+**Este item será gratuito para outro aluno. 💜**
+
+---
+
+# 5. ANÁLISE DO PRODUTO
+
+Criar uma função chamada:
+
+**Análise do Pass On**
+
+Depois que o usuário preencher as informações, analisar:
+
+* Fotos
+* Estado
+* Descrição
+* Categoria
+
+Mostrar uma sugestão:
+
+**“Parece adequado para venda.”**
+
+ou
+
+**“Pode ser uma boa opção para doação.”**
+
+Essa análise deve ser apenas uma recomendação.
+
+O usuário continua podendo escolher se quer vender ou doar.
+
+---
+
+# 6. PUBLICAR
+
+Criar botão:
+
+**Publicar item**
+
+Antes de publicar, verificar:
+
+* Pelo menos uma foto
+* Nome preenchido
+* Categoria selecionada
+* Estado selecionado
+* Descrição preenchida
+* Preço preenchido quando for venda
+
+Depois de publicar:
+
+**“Item publicado com sucesso! 💜”**
+
+Botões:
+
+* **Ver meu anúncio**
+* **Voltar para o início**
+
+O anúncio deve aparecer automaticamente na Home e na área Explorar.
+
+---
+
+# 7. EXPLORAR
+
+Criar uma tela:
+
+**Explorar**
+
+Mostrar todos os itens publicados pelos alunos.
+
+Adicionar:
+
+* Barra de pesquisa
+* Filtro por categoria
+* Filtro por venda ou doação
+* Filtro por estado do produto
+* Ordenação por mais recentes
+
+Os produtos devem aparecer em cards com:
+
+* Foto
+* Nome
+* Preço ou “Doação”
+* Categoria
+* Estado
+* Coração para favoritar
+
+---
+
+# 8. DETALHES DO PRODUTO
+
+Ao clicar em um produto, abrir:
+
+### Detalhes do item
+
+Mostrar:
+
+* Fotos em tamanho maior
+* Nome
+* Categoria
+* Estado
+* Descrição
+* Preço ou “Doação”
+* Nome do aluno que publicou
+
+Adicionar botão:
+
+**Tenho interesse**
+
+E botão:
+
+**Favoritar ❤️**
+
+O usuário deve conseguir entrar em contato com o anunciante através do sistema de mensagens do aplicativo.
+
+---
+
+# 9. FAVORITOS
+
+Criar uma tela:
+
+**Favoritos ❤️**
+
+Mostrar todos os produtos que o usuário marcou com coração.
+
+Permitir remover produtos dos favoritos.
+
+Se não houver favoritos, mostrar:
+
+**“Você ainda não adicionou nenhum item aos favoritos.”**
+
+---
+
+# 10. MEUS ANÚNCIOS
+
+Dentro do perfil, criar:
+
+**Meus anúncios**
+
+Mostrar:
+
+* Produtos publicados
+* Produtos vendidos
+* Produtos doados
+* Produtos disponíveis
+
+Cada anúncio deve ter opções:
+
+**Editar**
+
+**Excluir**
+
+**Marcar como vendido**
+
+**Marcar como doado**
+
+Quando um item for marcado como vendido ou doado, ele não deve continuar aparecendo como disponível para outros alunos.
+
+---
+
+# 11. PERFIL
+
+Criar uma tela:
+
+**Meu Perfil**
+
+Mostrar:
+
+* Nome do aluno
+* RA
+* Foto de perfil opcional
+
+Opções:
+
+**Meus anúncios**
+
+**Meus favoritos**
+
+**Histórico**
+
+**Configurações**
+
+**Sair**
+
+---
+
+# 12. CHAT
+
+Criar um sistema simples de mensagens entre alunos.
+
+Quando alguém clicar em:
+
+**Tenho interesse**
+
+deve poder iniciar uma conversa com o dono do anúncio.
+
+Criar:
+
+* Lista de conversas
+* Nome do aluno
+* Produto relacionado
+* Campo para escrever mensagem
+* Botão enviar
+
+Exemplo de mensagem inicial:
+
+**“Oi! Tenho interesse nesse item.”**
+
+Não criar sistema de pagamento dentro do aplicativo neste momento.
+
+---
+
+# 13. MENU INFERIOR
+
+Criar uma barra de navegação fixa com:
+
+🏠 **Início**
+
+🔍 **Explorar**
+
+➕ **Publicar**
+
+❤️ **Favoritos**
+
+👤 **Perfil**
+
+O botão **Publicar** deve ficar destacado em roxo.
+
+---
+
+# 14. BANCO DE DADOS
+
+Criar estrutura para armazenar os dados dos usuários e anúncios.
+
+Cada usuário deve ter:
+
+* ID
+* Nome
+* RA
+* Senha
+* Foto de perfil opcional
+
+Cada anúncio deve ter:
+
+* ID
+* ID do usuário
+* Nome do produto
+* Categoria
+* Tipo: venda ou doação
+* Preço
+* Estado
+* Descrição
+* Fotos
+* Data de publicação
+* Status: disponível, vendido ou doado
+
+Os favoritos devem ficar vinculados ao usuário.
+
+As mensagens também devem ficar vinculadas aos usuários e aos anúncios.
+
+---
+
+# 15. FOTOS
+
+As fotos adicionadas pelos usuários devem ser reais e ficar associadas ao anúncio correto.
+
+Permitir até 5 fotos por produto.
+
+A primeira foto será a foto principal.
+
+As imagens devem aparecer:
+
+* Na Home
+* No Explorar
+* Nos Favoritos
+* Nos Meus anúncios
+* Na página de detalhes
+
+---
+
+# 16. RESPONSIVIDADE
+
+O aplicativo deve funcionar corretamente em:
+
+* Celular
+* Tablet
+* Computador
+
+Priorizar a experiência mobile.
+
+Os botões devem ser grandes o suficiente para serem utilizados facilmente em telas pequenas.
+
+---
+
+# 17. SEGURANÇA E ACESSO
+
+O aplicativo deve ser destinado aos alunos da **E. E. República do Suriname**.
+
+Não permitir que usuários não autenticados publiquem anúncios.
+
+Cada usuário só pode editar ou excluir seus próprios anúncios.
+
+As informações pessoais dos alunos não devem ficar expostas desnecessariamente.
+
+---
+
+# 18. EXPERIÊNCIA DO USUÁRIO
+
+O aplicativo deve ser simples para alguém que nunca utilizou o Pass On.
+
+O fluxo principal deve ser:
+
+**Login → Home → Escolher produto → Ver detalhes → Tenho interesse**
+
+ou:
+
+**Login → Publicar → Vender/Doar → Adicionar fotos → Preencher informações → Análise → Publicar**
+
+---
+
+# 19. IMPORTANTE
+
+Não criar funcionalidades de pagamento neste momento.
+
+Não usar imagens genéricas no lugar das fotos enviadas pelos usuários.
+
+Não criar uma página perguntando se o usuário estuda na escola.
+
+Não alterar o nome da escola.
+
+O nome correto é:
+
+**E. E. República do Suriname**
+
+O aplicativo deve se chamar:
+
+**Pass On**
+
+Manter a identidade visual preta e roxa em todas as telas.
+
+Criar uma experiência consistente entre todas as páginas.
+
+Se alguma funcionalidade exigir configuração adicional de banco de dados, armazenamento de imagens ou autenticação, criar a estrutura necessária e indicar claramente o que precisa ser configurado.
+
+Priorizar primeiro um aplicativo funcional, navegável e bonito, em vez de adicionar funcionalidades desnecessárias.
