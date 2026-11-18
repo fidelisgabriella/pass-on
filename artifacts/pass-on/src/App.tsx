@@ -1,4 +1,4 @@
-import { type CSSProperties, type FormEvent, type ReactNode, createContext, useContext, useMemo, useState } from 'react';
+import { type CSSProperties, type ReactNode, createContext, useContext, useEffect, useMemo, useState } from 'react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import {
   CalendarDays,
@@ -52,6 +52,9 @@ import { ErrorBoundary } from '@/components/error-boundary';
 import { Toaster } from '@/components/ui/toaster';
 import { TooltipProvider } from '@/components/ui/tooltip';
 import NotFound from '@/pages/not-found';
+import { useAuth } from '@workspace/replit-auth-web';
+import { getGetStudentProfileQueryKey, useGetStudentProfile } from '@workspace/api-client-react';
+import { DonationsRoute as ApiDonationsRoute, DonationDetailRoute, NewDonationRoute, MyDonationsRoute, ModerationRoute, ModeratorSetupRoute, RegisterRoute, ProfileRoute as ApiProfileRoute } from '@/components/DonationFlows';
 
 const queryClient = new QueryClient();
 
@@ -70,24 +73,13 @@ function PassOnMark({ compact = false }: { compact?: boolean }) {
 
 function Login() {
   const [, setLocation] = useLocation();
-  const [ra, setRa] = useState('');
-  const [password, setPassword] = useState('');
-  const [showPassword, setShowPassword] = useState(false);
-  const [error, setError] = useState('');
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [recoverySent, setRecoverySent] = useState(false);
-
-  function handleSubmit(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    setRecoverySent(false);
-    if (!ra.trim() || !password.trim()) {
-      setError('Preencha seu RA e sua senha para continuar.');
-      return;
+  const { user, isLoading, isAuthenticated, login } = useAuth();
+  const profileQuery = useGetStudentProfile({ query: { enabled: isAuthenticated, queryKey: getGetStudentProfileQueryKey() } });
+  useEffect(() => {
+    if (isAuthenticated && !isLoading && !profileQuery.isLoading) {
+      setLocation(profileQuery.data?.profile ? '/inicio' : '/cadastro');
     }
-    setError('');
-    setIsSubmitting(true);
-    window.setTimeout(() => setLocation('/inicio'), 500);
-  }
+  }, [isAuthenticated, isLoading, profileQuery.isLoading, profileQuery.data, setLocation]);
 
   return (
     <main className="app-noise app-grid min-h-[100dvh] bg-background" data-testid="page-login">
@@ -103,16 +95,10 @@ function Login() {
           <div className="mx-auto w-full max-w-[410px]">
             <p className="font-mono text-[10px] uppercase tracking-[.18em] text-primary">seu espaço de troca</p>
             <h1 className="mt-4 text-[42px] font-black leading-[.94] tracking-[-.08em] text-foreground sm:text-5xl">Entrar no<br /><span className="text-primary">Pass On.</span></h1>
-            <p className="mt-5 text-sm leading-6 text-muted-foreground" data-testid="text-school-identity">Marketplace exclusivo para alunos da E. E. República do Suriname.</p>
-            <form onSubmit={handleSubmit} className="mt-9 space-y-5" noValidate>
-              <label className="block space-y-2"><span className="text-xs font-extrabold uppercase tracking-[.08em] text-secondary-foreground">RA</span><input id="ra" value={ra} onChange={(event) => { setRa(event.target.value); setError(''); }} placeholder="Digite seu registro acadêmico" autoComplete="username" className="focus-lilac h-14 w-full rounded-2xl border border-border bg-card px-4 text-sm outline-none transition-colors hover:border-primary/40 focus:border-primary" data-testid="input-ra" /></label>
-              <label className="block space-y-2"><span className="text-xs font-extrabold uppercase tracking-[.08em] text-secondary-foreground">Senha</span><span className="relative block"><input id="password" value={password} onChange={(event) => { setPassword(event.target.value); setError(''); }} type={showPassword ? 'text' : 'password'} placeholder="Digite sua senha" autoComplete="current-password" className="focus-lilac h-14 w-full rounded-2xl border border-border bg-card px-4 pr-12 text-sm outline-none transition-colors hover:border-primary/40 focus:border-primary" data-testid="input-password" /><button type="button" aria-label={showPassword ? 'Ocultar senha' : 'Mostrar senha'} onClick={() => setShowPassword((value) => !value)} className="focus-lilac absolute right-3 top-1/2 grid size-9 -translate-y-1/2 place-items-center rounded-xl text-muted-foreground hover:bg-secondary hover:text-foreground" data-testid="button-toggle-password">{showPassword ? <X className="size-4" /> : <CircleHelp className="size-4" />}</button></span></label>
-              {error && <div className="flex items-start gap-2 rounded-2xl border border-destructive/25 bg-destructive/10 px-4 py-3 text-xs leading-5 text-destructive" role="alert" data-testid="status-login-error"><CircleHelp className="mt-0.5 size-4 shrink-0" />{error}</div>}
-              {recoverySent && <div className="flex items-start gap-2 rounded-2xl border border-primary/25 bg-primary/10 px-4 py-3 text-xs leading-5 text-primary" role="status" data-testid="status-login-recovery"><Check className="mt-0.5 size-4 shrink-0" />Este é um link demonstrativo. A equipe pode ajudar por aqui em breve.</div>}
-              <button type="submit" disabled={isSubmitting} className="focus-lilac flex h-14 w-full items-center justify-center gap-2 rounded-2xl bg-primary text-sm font-black text-primary-foreground transition-all hover:-translate-y-0.5 hover:bg-[#38156b] disabled:opacity-60" data-testid="button-login">{isSubmitting ? 'Abrindo seu espaço...' : 'Entrar'}{!isSubmitting && <ArrowRight className="size-4" />}</button>
-              <button type="button" onClick={() => { setRecoverySent(true); setError(''); }} className="focus-lilac mx-auto block rounded-lg px-2 py-1 text-xs font-bold text-muted-foreground hover:text-primary" data-testid="button-forgot-password">Esqueci minha senha</button>
-            </form>
-            <p className="mt-12 border-t border-border pt-5 text-[11px] leading-5 text-muted-foreground">Ambiente demonstrativo · seus dados não são enviados para nenhum serviço.</p>
+            <p className="mt-5 text-sm leading-6 text-muted-foreground" data-testid="text-school-identity">Marketplace exclusivo para alunos da E. E. República do Suriname. Compartilhe, encontre e faça circular.</p>
+            {isAuthenticated && <div className="mt-7 rounded-2xl border border-primary/20 bg-primary/[.08] p-4 text-xs font-bold text-primary" data-testid="status-login-profile">Olá, {user?.firstName || 'estudante'}! Estamos preparando seu espaço...</div>}
+            <button type="button" onClick={() => isAuthenticated ? setLocation(profileQuery.data?.profile ? '/inicio' : '/cadastro') : login()} disabled={isLoading || profileQuery.isLoading} className="focus-lilac mt-9 flex h-14 w-full items-center justify-center gap-2 rounded-2xl bg-primary text-sm font-black text-primary-foreground transition-all hover:-translate-y-0.5 hover:bg-[#38156b] disabled:opacity-60" data-testid="button-login">{isLoading || profileQuery.isLoading ? 'Carregando...' : isAuthenticated ? 'Continuar para o Pass On' : 'Entrar com sua conta'}<ArrowRight className="size-4" /></button>
+            <p className="mt-12 border-t border-border pt-5 text-[11px] leading-5 text-muted-foreground">Um marketplace seguro e gratuito para estudantes da E. E. República do Suriname.</p>
           </div>
         </section>
       </div>
@@ -146,9 +132,6 @@ const listings: Listing[] = [
   { id: 'relogio-pulseira-marrom', title: 'Relógio com pulseira marrom', category: 'Acessórios', condition: 'Bom estado', seller: 'Aluno(a)', price: 'R$ 50,00', mode: 'sale', note: 'Disponível para venda', icon: Watch, art: '#6e5442', artLight: '#d8c0a7', photo: brownWatchPhoto },
   { id: 'colar-dourado-coracao', title: 'Colar dourado de coração', category: 'Acessórios', condition: 'Bom estado', seller: 'Aluno(a)', price: 'R$ 50,00', mode: 'sale', note: 'Disponível para venda', icon: Watch, art: '#83704a', artLight: '#e8d6a5', photo: heartNecklacePhoto },
   { id: 'pulseira-prateada', title: 'Pulseira prateada', category: 'Acessórios', condition: 'Bom estado', seller: 'Aluno(a)', price: 'R$ 50,00', mode: 'sale', note: 'Disponível para venda', icon: Watch, art: '#62636c', artLight: '#d5d6dd', photo: silverBraceletPhoto },
-  { id: 'camiseta-uniforme', title: 'Camiseta branca de uniforme', category: 'Roupas', condition: 'Bom estado', seller: 'Joana P.', mode: 'donation', note: 'tam. P · lavada e pronta', icon: Shirt, art: '#b195ca', artLight: '#eadcf1' },
-  { id: 'estojo-xadrez', title: 'Estojo xadrez', category: 'Mochilas e estojos', condition: 'Bom estado', seller: 'Duda F.', mode: 'donation', note: 'zíper funcionando', icon: PackageOpen, art: '#e0a05d', artLight: '#f8dfae' },
-  { id: 'presilhas-coloridas', title: 'Kit de presilhas', category: 'Acessórios', condition: 'Como novo', seller: 'Maya C.', mode: 'donation', note: '6 unidades · sem uso', icon: Watch, art: '#cd708b', artLight: '#f3c1c9' },
 ];
 
 type LostFoundStatus = 'Perdido' | 'Encontrado' | 'Devolvido';
@@ -320,7 +303,7 @@ function SearchField({ value, onChange, onSubmit, className = '' }: { value: str
 
 function HomeRoute() { return <MarketplaceShell><HomeContent /></MarketplaceShell>; }
 function SalesRoute() { return <MarketplaceShell><ListingsPage mode="sale" /></MarketplaceShell>; }
-function DonationsRoute() { return <MarketplaceShell><ListingsPage mode="donation" /></MarketplaceShell>; }
+function DonationsLegacyRoute() { return <MarketplaceShell><ListingsPage mode="donation" /></MarketplaceShell>; }
 
 function HomeContent() {
   const [search, setSearch] = useState('');
@@ -463,14 +446,11 @@ function FavoritesRoute() {
   return <MarketplaceShell><div className="animate-rise" data-testid="page-favoritos"><p className="font-mono text-[10px] uppercase tracking-[.16em] text-primary">guardados para depois</p><h1 className="mt-3 text-[clamp(2.8rem,6vw,5rem)] font-black leading-[.9] tracking-[-.09em] text-foreground">Favoritos<span className="text-primary">.</span></h1><p className="mt-4 text-sm leading-6 text-muted-foreground">Seus itens marcados ficam aqui.</p>{items.length > 0 ? <div className="mt-8 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">{items.map((item) => <ListingCard key={item.id} item={item} />)}</div> : <div className="mt-8 rounded-3xl border border-dashed border-border bg-card p-10 text-center" data-testid="empty-favorites"><span className="mx-auto grid size-14 place-items-center rounded-2xl bg-secondary text-primary"><Heart className="size-6" /></span><h2 className="mt-5 text-xl font-black tracking-[-.04em] text-foreground">Ainda não há favoritos.</h2><p className="mx-auto mt-2 max-w-xs text-sm leading-6 text-muted-foreground">Toque no coração de um item para guardar aquilo que você quer lembrar.</p><Link href="/explorar" className="focus-lilac mt-6 inline-flex items-center gap-2 rounded-xl bg-primary px-4 py-3 text-xs font-black text-primary-foreground" data-testid="link-favorites-explore">Explorar itens <ArrowRight className="size-4" /></Link></div>}</div></MarketplaceShell>;
 }
 
-function ProfileRoute() {
-  const [, setLocation] = useLocation();
-  return <MarketplaceShell><div className="mx-auto max-w-[720px] animate-rise" data-testid="page-perfil"><p className="font-mono text-[10px] uppercase tracking-[.16em] text-primary">seu espaço</p><h1 className="mt-3 text-[clamp(2.8rem,6vw,5rem)] font-black leading-[.9] tracking-[-.09em] text-foreground">Perfil<span className="text-primary">.</span></h1><section className="mt-8 rounded-3xl border border-border bg-card p-6 sm:p-8" data-testid="section-profile-card"><div className="flex items-center gap-4"><span className="grid size-16 place-items-center rounded-2xl bg-accent text-lg font-black text-accent-foreground" data-testid="avatar-profile">MC</span><div><h2 className="text-xl font-black text-foreground" data-testid="text-profile-name">Marina Costa</h2><p className="mt-1 text-sm text-muted-foreground">Aluna · RA 2025.0148</p></div></div><div className="mt-8 grid grid-cols-2 gap-3"><div className="rounded-2xl bg-secondary p-4"><p className="font-mono text-2xl font-black text-primary">{useMarketplace().favorites.length}</p><p className="mt-1 text-xs font-bold text-muted-foreground">favoritos</p></div><div className="rounded-2xl bg-secondary p-4"><p className="font-mono text-2xl font-black text-primary">2025</p><p className="mt-1 text-xs font-bold text-muted-foreground">aluna desde</p></div></div><button type="button" onClick={() => setLocation('/')} className="focus-lilac mt-8 inline-flex items-center gap-2 rounded-xl border border-destructive/20 px-4 py-3 text-xs font-black text-destructive hover:bg-destructive/10" data-testid="button-logout-profile"><LogOut className="size-4" /> Sair da conta</button></section><p className="mt-6 text-xs leading-5 text-muted-foreground">Pass On é um espaço demonstrativo de troca entre alunos da E. E. República do Suriname.</p></div></MarketplaceShell>;
-}
+function ProfileRoute() { return <ApiProfileRoute />; }
 
 function Router() {
   const [location] = useLocation();
-  return <ErrorBoundary resetKey={location}><Switch><Route path="/" component={Login} /><Route path="/inicio" component={HomeRoute} /><Route path="/vendas" component={SalesRoute} /><Route path="/doacoes" component={DonationsRoute} /><Route path="/produto/:id">{(params) => <ProductDetailRoute id={params.id} />}</Route><Route path="/explorar" component={ExploreRoute} /><Route path="/achados-e-perdidos" component={LostFoundRoute} /><Route path="/publicar" component={PublishRoute} /><Route path="/favoritos" component={FavoritesRoute} /><Route path="/perfil" component={ProfileRoute} /><Route component={NotFound} /></Switch></ErrorBoundary>;
+  return <ErrorBoundary resetKey={location}><Switch><Route path="/" component={Login} /><Route path="/cadastro" component={RegisterRoute} /><Route path="/inicio" component={HomeRoute} /><Route path="/vendas" component={SalesRoute} /><Route path="/doacoes" component={ApiDonationsRoute} /><Route path="/doacoes/nova" component={NewDonationRoute} /><Route path="/doacao/:id">{(params) => <DonationDetailRoute id={params.id} />}</Route><Route path="/minhas-doacoes" component={MyDonationsRoute} /><Route path="/moderacao/doacoes" component={ModerationRoute} /><Route path="/moderador/configurar" component={ModeratorSetupRoute} /><Route path="/produto/:id">{(params) => <ProductDetailRoute id={params.id} />}</Route><Route path="/explorar" component={ExploreRoute} /><Route path="/achados-e-perdidos" component={LostFoundRoute} /><Route path="/publicar" component={PublishRoute} /><Route path="/favoritos" component={FavoritesRoute} /><Route path="/perfil" component={ProfileRoute} /><Route component={NotFound} /></Switch></ErrorBoundary>;
 }
 
 function App() {

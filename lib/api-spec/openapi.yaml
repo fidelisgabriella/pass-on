@@ -10,6 +10,14 @@ servers:
 tags:
   - name: health
     description: Health operations
+  - name: auth
+    description: Browser authentication operations
+  - name: student-profile
+    description: Student profile and moderator setup
+  - name: donations
+    description: School donation listings and interests
+  - name: storage
+    description: Protected image upload and serving
 paths:
   /healthz:
     get:
@@ -24,7 +32,487 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/HealthStatus"
+  /auth/user:
+    get:
+      operationId: getCurrentAuthUser
+      tags: [auth]
+      summary: Return the current Replit Auth user
+      responses:
+        "200":
+          description: Authentication state
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AuthUserEnvelope"
+  /login:
+    get:
+      operationId: beginBrowserLogin
+      tags: [auth]
+      summary: Begin browser login
+      parameters:
+        - name: returnTo
+          in: query
+          required: false
+          schema:
+            type: string
+      responses:
+        "302":
+          description: Redirect to the OIDC provider
+  /callback:
+    get:
+      operationId: handleBrowserLoginCallback
+      tags: [auth]
+      summary: Complete browser login
+      parameters:
+        - name: code
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: state
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: iss
+          in: query
+          required: false
+          schema:
+            type: string
+            format: uri
+      responses:
+        "302":
+          description: Redirect after login
+  /logout:
+    get:
+      operationId: logoutBrowserSession
+      tags: [auth]
+      summary: End browser session
+      parameters:
+        - name: returnTo
+          in: query
+          required: false
+          schema:
+            type: string
+      responses:
+        "302":
+          description: Redirect after logout
+  /mobile-auth/token-exchange:
+    post:
+      operationId: exchangeMobileAuthorizationCode
+      tags: [auth]
+      summary: Exchange a mobile authorization code for a session
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/MobileTokenExchangeInput"
+      responses:
+        "200":
+          description: Mobile session created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MobileTokenExchangeResponse"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "500":
+          $ref: "#/components/responses/ServerError"
+  /mobile-auth/logout:
+    post:
+      operationId: logoutMobileSession
+      tags: [auth]
+      summary: Clear a mobile session
+      parameters:
+        - $ref: "#/components/parameters/AuthorizationSessionHeader"
+      responses:
+        "200":
+          description: Mobile logout result
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/LogoutSuccess"
+  /student-profile:
+    get:
+      operationId: getStudentProfile
+      tags: [student-profile]
+      summary: Get the current student's profile
+      responses:
+        "200":
+          description: Student profile, when completed
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/StudentProfileEnvelope"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+    put:
+      operationId: saveStudentProfile
+      tags: [student-profile]
+      summary: Save the current student's profile
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/StudentProfileInput"
+      responses:
+        "200":
+          description: Profile saved
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/StudentProfile"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+  /moderator/claim:
+    post:
+      operationId: claimModeratorAccess
+      tags: [student-profile]
+      summary: Claim the first moderator account
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ModeratorClaimInput"
+      responses:
+        "200":
+          description: Moderator access granted
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ModeratorStatus"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "409":
+          $ref: "#/components/responses/Conflict"
+  /donations:
+    get:
+      operationId: listDonations
+      tags: [donations]
+      summary: List available donations
+      responses:
+        "200":
+          description: Available donations
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DonationList"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+    post:
+      operationId: createDonation
+      tags: [donations]
+      summary: Submit a donation for approval
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/DonationInput"
+      responses:
+        "201":
+          description: Donation submitted for approval
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Donation"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+  /donations/mine:
+    get:
+      operationId: listMyDonations
+      tags: [donations]
+      summary: List the current student's donations
+      responses:
+        "200":
+          description: Donations created by the current student
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DonationList"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+  /donations/pending:
+    get:
+      operationId: listPendingDonations
+      tags: [donations]
+      summary: List donations awaiting moderation
+      responses:
+        "200":
+          description: Donations awaiting approval
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DonationList"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+  /donations/{id}:
+    get:
+      operationId: getDonation
+      tags: [donations]
+      summary: Get donation details
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Donation details
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Donation"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
+  /donations/{id}/interests:
+    get:
+      operationId: listDonationInterests
+      tags: [donations]
+      summary: List students interested in a donation
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Interested students
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DonationInterestList"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
+    post:
+      operationId: expressDonationInterest
+      tags: [donations]
+      summary: Express interest in an available donation
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Interest recorded
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DonationInterestStatus"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "409":
+          $ref: "#/components/responses/Conflict"
+  /donations/{id}/approve:
+    post:
+      operationId: approveDonation
+      tags: [donations]
+      summary: Approve a pending donation
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Donation approved and available
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Donation"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "409":
+          $ref: "#/components/responses/Conflict"
+  /donations/{id}/status:
+    patch:
+      operationId: updateDonationStatus
+      tags: [donations]
+      summary: Mark an owned donation reserved or delivered
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/DonationStatusInput"
+      responses:
+        "200":
+          description: Donation status updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Donation"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "409":
+          $ref: "#/components/responses/Conflict"
+  /storage/uploads/request-url:
+    post:
+      operationId: requestUploadUrl
+      tags: [storage]
+      summary: Request a protected photo upload URL
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UploadUrlInput"
+      responses:
+        "200":
+          description: Presigned upload URL generated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UploadUrl"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "500":
+          $ref: "#/components/responses/ServerError"
+  /storage/public-objects/{filePath}:
+    get:
+      operationId: getPublicObject
+      tags: [storage]
+      summary: Serve a public app asset
+      parameters:
+        - name: filePath
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Public object bytes
+          content:
+            "*/*":
+              schema:
+                type: string
+                format: binary
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "500":
+          $ref: "#/components/responses/ServerError"
+  /storage/objects/{objectPath}:
+    get:
+      operationId: getStorageObject
+      tags: [storage]
+      summary: Serve a protected uploaded object
+      parameters:
+        - name: objectPath
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Uploaded object bytes
+          content:
+            "*/*":
+              schema:
+                type: string
+                format: binary
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "500":
+          $ref: "#/components/responses/ServerError"
 components:
+  parameters:
+    AuthorizationSessionHeader:
+      name: Authorization
+      in: header
+      required: false
+      description: Bearer session token for mobile clients
+      schema:
+        type: string
+    SessionCookie:
+      name: sid
+      in: cookie
+      required: false
+      description: Browser session cookie
+      schema:
+        type: string
+  responses:
+    BadRequest:
+      description: Invalid request data
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ErrorEnvelope"
+    Unauthorized:
+      description: Authentication required
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ErrorEnvelope"
+    Forbidden:
+      description: Permission denied
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ErrorEnvelope"
+    NotFound:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ErrorEnvelope"
+    Conflict:
+      description: Request conflicts with the current resource state
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ErrorEnvelope"
+    ServerError:
+      description: Server error
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ErrorEnvelope"
   schemas:
     HealthStatus:
       type: object
@@ -33,4 +521,226 @@ components:
           type: string
       required:
         - status
+    ErrorEnvelope:
+      type: object
+      required: [error]
+      properties:
+        error:
+          type: string
+    AuthUser:
+      type: object
+      required: [id, email, firstName, lastName, profileImageUrl]
+      properties:
+        id:
+          type: string
+        email:
+          type: [string, "null"]
+          format: email
+        firstName:
+          type: [string, "null"]
+        lastName:
+          type: [string, "null"]
+        profileImageUrl:
+          type: [string, "null"]
+    AuthUserEnvelope:
+      type: object
+      required: [user]
+      properties:
+        user:
+          oneOf:
+            - $ref: "#/components/schemas/AuthUser"
+            - type: "null"
+    MobileTokenExchangeInput:
+      type: object
+      required: [code, code_verifier, redirect_uri, state]
+      properties:
+        code:
+          type: string
+          minLength: 1
+        code_verifier:
+          type: string
+          minLength: 1
+        redirect_uri:
+          type: string
+          minLength: 1
+          format: uri
+        state:
+          type: string
+          minLength: 1
+        nonce:
+          type: string
+          minLength: 1
+    MobileTokenExchangeResponse:
+      type: object
+      required: [token]
+      properties:
+        token:
+          type: string
+    LogoutSuccess:
+      type: object
+      required: [success]
+      properties:
+        success:
+          type: boolean
+          const: true
+    StudentProfile:
+      type: object
+      required: [displayName, hasRa, isModerator]
+      properties:
+        displayName:
+          type: string
+        hasRa:
+          type: boolean
+        isModerator:
+          type: boolean
+    StudentProfileEnvelope:
+      type: object
+      required: [profile]
+      properties:
+        profile:
+          oneOf:
+            - $ref: "#/components/schemas/StudentProfile"
+            - type: "null"
+    StudentProfileInput:
+      type: object
+      required: [displayName, ra]
+      properties:
+        displayName:
+          type: string
+          minLength: 2
+          maxLength: 100
+        ra:
+          type: string
+          minLength: 1
+          maxLength: 64
+    ModeratorClaimInput:
+      type: object
+      required: [setupCode]
+      properties:
+        setupCode:
+          type: string
+          minLength: 1
+          maxLength: 256
+    ModeratorStatus:
+      type: object
+      required: [isModerator]
+      properties:
+        isModerator:
+          type: boolean
+    DonationStatus:
+      type: string
+      enum: [pending, available, reserved, delivered]
+    DonationCategory:
+      type: string
+      enum: [Roupas, "Roupas de frio", "Mochilas e estojos", Acessórios]
+    Donation:
+      type: object
+      required:
+        [id, title, category, description, size, condition, status, imagePath, ownerName, createdAt, interestCount, isOwner, isInterested]
+      properties:
+        id:
+          type: string
+        title:
+          type: string
+        category:
+          $ref: "#/components/schemas/DonationCategory"
+        description:
+          type: [string, "null"]
+        size:
+          type: [string, "null"]
+        condition:
+          type: [string, "null"]
+        status:
+          $ref: "#/components/schemas/DonationStatus"
+        imagePath:
+          type: string
+        ownerName:
+          type: [string, "null"]
+        createdAt:
+          type: string
+          format: date-time
+        interestCount:
+          type: integer
+        isOwner:
+          type: boolean
+        isInterested:
+          type: boolean
+    DonationList:
+      type: array
+      items:
+        $ref: "#/components/schemas/Donation"
+    DonationInput:
+      type: object
+      required: [title, category, imagePath, condition]
+      properties:
+        title:
+          type: string
+          minLength: 2
+          maxLength: 120
+        category:
+          $ref: "#/components/schemas/DonationCategory"
+        description:
+          type: [string, "null"]
+          maxLength: 1000
+        size:
+          type: [string, "null"]
+          maxLength: 40
+        condition:
+          type: string
+          minLength: 2
+          maxLength: 60
+        imagePath:
+          type: string
+          minLength: 1
+          maxLength: 500
+    DonationInterest:
+      type: object
+      required: [studentName, createdAt]
+      properties:
+        studentName:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+    DonationInterestList:
+      type: array
+      items:
+        $ref: "#/components/schemas/DonationInterest"
+    DonationInterestStatus:
+      type: object
+      required: [interested]
+      properties:
+        interested:
+          type: boolean
+    DonationStatusInput:
+      type: object
+      required: [status]
+      properties:
+        status:
+          type: string
+          enum: [reserved, delivered]
+    UploadUrlInput:
+      type: object
+      required: [name, size, contentType]
+      properties:
+        name:
+          type: string
+          minLength: 1
+        size:
+          type: integer
+          minimum: 1
+        contentType:
+          type: string
+          minLength: 1
+    UploadUrl:
+      type: object
+      required: [uploadURL, objectPath, metadata]
+      properties:
+        uploadURL:
+          type: string
+          format: uri
+        objectPath:
+          type: string
+        metadata:
+          $ref: "#/components/schemas/UploadUrlInput"
 
