@@ -27,6 +27,20 @@ import {
   X,
 } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
+import plaidJacketPhoto from '@assets/IMG_0300_1795006058330.jpeg';
+import heartNecklacePhoto from '@assets/IMG_0301_1795006058330.jpeg';
+import navySweaterPhoto from '@assets/IMG_0302_1795006058330.jpeg';
+import creamTopPhoto from '@assets/IMG_0303_1795006058330.jpeg';
+import silverBraceletPhoto from '@assets/IMG_0304_1795006058330.jpeg';
+import brownWatchPhoto from '@assets/IMG_0305_1795006058330.jpeg';
+import lightJeansFirstPhoto from '@assets/IMG_0306_1795006058330.jpeg';
+import denimShortsPhoto from '@assets/IMG_0307_1795006058330.jpeg';
+import colorfulSweaterPhoto from '@assets/IMG_0308_1795006058330.jpeg';
+import darkJeansPhoto from '@assets/IMG_0309_1795006058330.jpeg';
+import lightJeansSecondPhoto from '@assets/IMG_0310_1795006058330.jpeg';
+import stripedTeePhoto from '@assets/IMG_0311_1795006058330.jpeg';
+import starsBraceletPhoto from '@assets/IMG_0312_1795006058330.jpeg';
+import stripedJacketPhoto from '@assets/IMG_0299_1795006058329.jpeg';
 import lostBackpackPhoto from '@assets/generated_images/pass-on-lost-backpack.jpg';
 import lostHoodiePhoto from '@assets/generated_images/pass-on-lost-hoodie.jpg';
 import lostPencilCasePhoto from '@assets/generated_images/pass-on-lost-pencil-case.jpg';
@@ -108,7 +122,7 @@ function Login() {
 
 type Category = 'Roupas' | 'Roupas de frio' | 'Mochilas e estojos' | 'Acessórios';
 type ListingMode = 'sale' | 'donation';
-type Listing = { id: string; title: string; category: Category; condition: string; seller: string; price?: string; mode: ListingMode; note: string; icon: LucideIcon; art: string; artLight: string };
+type Listing = { id: string; title: string; category: Category; condition: string; seller: string; price?: string; mode: ListingMode; note: string; icon: LucideIcon; art: string; artLight: string; photo?: string; size?: string };
 
 const categories: { label: Category; icon: LucideIcon; copy: string }[] = [
   { label: 'Roupas', icon: Shirt, copy: 'uniformes e peças' },
@@ -118,13 +132,22 @@ const categories: { label: Category; icon: LucideIcon; copy: string }[] = [
 ];
 
 const listings: Listing[] = [
-  { id: 'jaqueta-jeans', title: 'Jaqueta jeans oversized', category: 'Roupas de frio', condition: 'Muito bom estado', seller: 'Bia R.', price: 'R$ 48', mode: 'sale', note: 'tam. M · retirada combinada', icon: Shirt, art: '#6c4ba7', artLight: '#d9c4ef' },
-  { id: 'mochila-coral', title: 'Mochila coral', category: 'Mochilas e estojos', condition: 'Bom estado', seller: 'Lucas T.', price: 'R$ 35', mode: 'sale', note: '3 compartimentos', icon: Backpack, art: '#d26f63', artLight: '#f5c4a9' },
-  { id: 'sueter-lilas', title: 'Suéter lilás confortável', category: 'Roupas de frio', condition: 'Como novo', seller: 'Nina S.', price: 'R$ 32', mode: 'sale', note: 'tam. P · sem marcas', icon: Shirt, art: '#8a6db9', artLight: '#ddd0f2' },
-  { id: 'relogio-digital', title: 'Relógio digital preto', category: 'Acessórios', condition: 'Bom estado', seller: 'Caio M.', price: 'R$ 18', mode: 'sale', note: 'pulseira ajustável', icon: Watch, art: '#33455e', artLight: '#b7c9dc' },
+  { id: 'casaco-forro-xadrez', title: 'Casaco azul-marinho com forro xadrez', category: 'Roupas', condition: 'Bom estado', seller: 'Aluno(a)', price: 'R$ 50,00', mode: 'sale', note: 'Disponível para venda', icon: Shirt, art: '#26324b', artLight: '#9aabc9', photo: plaidJacketPhoto, size: 'P' },
+  { id: 'casaco-listrado', title: 'Casaco listrado azul e branco', category: 'Roupas', condition: 'Bom estado', seller: 'Aluno(a)', price: 'R$ 50,00', mode: 'sale', note: 'Disponível para venda', icon: Shirt, art: '#26324b', artLight: '#9aabc9', photo: stripedJacketPhoto, size: 'M' },
+  { id: 'sueter-listrado-colorido', title: 'Suéter listrado colorido', category: 'Roupas', condition: 'Bom estado', seller: 'Aluno(a)', price: 'R$ 50,00', mode: 'sale', note: 'Disponível para venda', icon: Shirt, art: '#7b648e', artLight: '#d6bddc', photo: colorfulSweaterPhoto, size: 'GG' },
+  { id: 'sueter-azul-marinho', title: 'Suéter azul-marinho', category: 'Roupas', condition: 'Bom estado', seller: 'Aluno(a)', price: 'R$ 50,00', mode: 'sale', note: 'Disponível para venda', icon: Shirt, art: '#20283b', artLight: '#8796b2', photo: navySweaterPhoto, size: 'P' },
+  { id: 'blusa-creme-sem-mangas', title: 'Blusa creme sem mangas', category: 'Roupas', condition: 'Bom estado', seller: 'Aluno(a)', price: 'R$ 50,00', mode: 'sale', note: 'Disponível para venda', icon: Shirt, art: '#b6a991', artLight: '#ece2cf', photo: creamTopPhoto, size: 'M' },
+  { id: 'short-jeans-38', title: 'Short jeans', category: 'Roupas', condition: 'Bom estado', seller: 'Aluno(a)', price: 'R$ 50,00', mode: 'sale', note: 'Disponível para venda', icon: Shirt, art: '#59657b', artLight: '#c1cede', photo: denimShortsPhoto, size: '38' },
+  { id: 'camiseta-listrada', title: 'Camiseta listrada', category: 'Roupas', condition: 'Bom estado', seller: 'Aluno(a)', price: 'R$ 50,00', mode: 'sale', note: 'Disponível para venda', icon: Shirt, art: '#b5b2a8', artLight: '#ede9de', photo: stripedTeePhoto, size: 'GG' },
+  { id: 'calca-jeans-clara-1', title: 'Calça jeans azul-clara', category: 'Roupas', condition: 'Bom estado', seller: 'Aluno(a)', price: 'R$ 50,00', mode: 'sale', note: 'Disponível para venda', icon: Shirt, art: '#8393a9', artLight: '#d4e0ed', photo: lightJeansFirstPhoto, size: '40' },
+  { id: 'calca-jeans-escura', title: 'Calça jeans escura', category: 'Roupas', condition: 'Bom estado', seller: 'Aluno(a)', price: 'R$ 50,00', mode: 'sale', note: 'Disponível para venda', icon: Shirt, art: '#303442', artLight: '#9699a8', photo: darkJeansPhoto, size: '38' },
+  { id: 'calca-jeans-clara-2', title: 'Calça jeans azul-clara', category: 'Roupas', condition: 'Bom estado', seller: 'Aluno(a)', price: 'R$ 50,00', mode: 'sale', note: 'Disponível para venda', icon: Shirt, art: '#8393a9', artLight: '#d4e0ed', photo: lightJeansSecondPhoto, size: '40' },
+  { id: 'pulseira-estrelinhas', title: 'Pulseira de estrelinhas', category: 'Acessórios', condition: 'Bom estado', seller: 'Aluno(a)', price: 'R$ 50,00', mode: 'sale', note: 'Disponível para venda', icon: Watch, art: '#5d536e', artLight: '#c8bed8', photo: starsBraceletPhoto },
+  { id: 'relogio-pulseira-marrom', title: 'Relógio com pulseira marrom', category: 'Acessórios', condition: 'Bom estado', seller: 'Aluno(a)', price: 'R$ 50,00', mode: 'sale', note: 'Disponível para venda', icon: Watch, art: '#6e5442', artLight: '#d8c0a7', photo: brownWatchPhoto },
+  { id: 'colar-dourado-coracao', title: 'Colar dourado de coração', category: 'Acessórios', condition: 'Bom estado', seller: 'Aluno(a)', price: 'R$ 50,00', mode: 'sale', note: 'Disponível para venda', icon: Watch, art: '#83704a', artLight: '#e8d6a5', photo: heartNecklacePhoto },
+  { id: 'pulseira-prateada', title: 'Pulseira prateada', category: 'Acessórios', condition: 'Bom estado', seller: 'Aluno(a)', price: 'R$ 50,00', mode: 'sale', note: 'Disponível para venda', icon: Watch, art: '#62636c', artLight: '#d5d6dd', photo: silverBraceletPhoto },
   { id: 'camiseta-uniforme', title: 'Camiseta branca de uniforme', category: 'Roupas', condition: 'Bom estado', seller: 'Joana P.', mode: 'donation', note: 'tam. P · lavada e pronta', icon: Shirt, art: '#b195ca', artLight: '#eadcf1' },
   { id: 'estojo-xadrez', title: 'Estojo xadrez', category: 'Mochilas e estojos', condition: 'Bom estado', seller: 'Duda F.', mode: 'donation', note: 'zíper funcionando', icon: PackageOpen, art: '#e0a05d', artLight: '#f8dfae' },
-  { id: 'calca-esportiva', title: 'Calça esportiva preta', category: 'Roupas', condition: 'Bom estado', seller: 'Rafa L.', price: 'R$ 25', mode: 'sale', note: 'tam. G · confortável', icon: Shirt, art: '#4d536f', artLight: '#c9cadf' },
   { id: 'presilhas-coloridas', title: 'Kit de presilhas', category: 'Acessórios', condition: 'Como novo', seller: 'Maya C.', mode: 'donation', note: '6 unidades · sem uso', icon: Watch, art: '#cd708b', artLight: '#f3c1c9' },
 ];
 
@@ -189,7 +212,7 @@ const navItems: { href: string; label: string; icon: LucideIcon }[] = [
 function MarketplaceShell({ children }: { children: ReactNode }) {
   const [location, setLocation] = useLocation();
   const [profileOpen, setProfileOpen] = useState(false);
-  const active = location.startsWith('/inicio') ? '/inicio' : location.startsWith('/vendas') || location.startsWith('/doacoes') || location.startsWith('/explorar') ? '/explorar' : location.startsWith('/achados-e-perdidos') ? '/achados-e-perdidos' : location.startsWith('/publicar') ? '/publicar' : location.startsWith('/favoritos') ? '/favoritos' : '/perfil';
+  const active = location.startsWith('/inicio') ? '/inicio' : location.startsWith('/vendas') || location.startsWith('/doacoes') || location.startsWith('/explorar') || location.startsWith('/produto/') ? '/explorar' : location.startsWith('/achados-e-perdidos') ? '/achados-e-perdidos' : location.startsWith('/publicar') ? '/publicar' : location.startsWith('/favoritos') ? '/favoritos' : '/perfil';
   function signOut() { setLocation('/'); }
   return (
     <main className="app-noise min-h-[100dvh] bg-background" data-testid="page-marketplace">
@@ -217,13 +240,78 @@ function MarketplaceShell({ children }: { children: ReactNode }) {
 
 function ProductArt({ item }: { item: Listing }) {
   const Icon = item.icon;
+  if (item.photo) {
+    return (
+      <div className="relative flex h-[220px] items-center justify-center overflow-hidden bg-[#17131f] p-2" data-testid={`visual-product-${item.id}`}>
+        <img src={item.photo} alt={item.title} className="size-full object-contain" loading="lazy" data-testid={`image-product-${item.id}`} />
+        <span className="absolute bottom-3 left-3 rounded-full border border-white/15 bg-black/70 px-2.5 py-1 font-mono text-[9px] uppercase tracking-[.1em] text-white">{item.category}</span>
+      </div>
+    );
+  }
   return <div className="product-art relative flex h-[168px] items-center justify-center overflow-hidden" style={{ background: item.art, '--art-light': item.artLight } as CSSProperties} data-testid={`visual-product-${item.id}`}><div className="absolute -right-12 -top-12 size-44 rounded-full border border-white/25" /><div className="absolute -bottom-14 -left-8 size-36 rounded-full border border-white/20" /><div className="relative grid size-24 place-items-center rounded-[30px] border border-white/30 bg-white/15 text-white shadow-[0_12px_28px_rgba(20,10,35,.18)] backdrop-blur-sm transition-transform duration-500 group-hover:rotate-3 group-hover:scale-105"><Icon className="size-11" strokeWidth={1.5} /></div><span className="absolute bottom-3 left-3 rounded-full bg-black/15 px-2.5 py-1 font-mono text-[9px] uppercase tracking-[.1em] text-white/90">{item.category}</span></div>;
 }
 
 function ListingCard({ item }: { item: Listing }) {
   const { favorites, toggleFavorite } = useMarketplace();
   const favorite = favorites.includes(item.id);
-  return <article className="group overflow-hidden rounded-[24px] border border-border/80 bg-card transition-all duration-300 hover:-translate-y-1 hover:border-primary/45 hover:shadow-[0_16px_38px_hsl(var(--foreground)/.1)]" data-testid={`card-listing-${item.id}`}><ProductArt item={item} /><div className="p-4 sm:p-5"><div className="flex items-start justify-between gap-3"><div className="min-w-0"><h3 className="truncate text-[15px] font-black tracking-[-.035em] text-foreground" data-testid={`text-listing-title-${item.id}`}>{item.title}</h3><p className="mt-1 text-[11px] text-muted-foreground" data-testid={`text-listing-condition-${item.id}`}>{item.condition}</p></div><button type="button" aria-label={favorite ? `Remover ${item.title} dos favoritos` : `Favoritar ${item.title}`} aria-pressed={favorite} onClick={() => toggleFavorite(item.id)} className={`focus-lilac grid size-9 shrink-0 place-items-center rounded-xl transition-all ${favorite ? 'bg-primary text-primary-foreground' : 'bg-secondary text-muted-foreground hover:bg-primary/10 hover:text-primary'}`} data-testid={`button-favorite-${item.id}`}><Heart className="size-[17px]" fill={favorite ? 'currentColor' : 'none'} /></button></div><div className="mt-4 flex items-center gap-2 text-[11px] text-muted-foreground"><span className="grid size-6 place-items-center rounded-full bg-secondary text-[9px] font-black text-primary">{item.seller.split(' ').map((part) => part[0]).join('')}</span><span data-testid={`text-listing-seller-${item.id}`}>{item.seller}</span><span className="text-border">·</span><span>{item.note}</span></div><div className="mt-4 flex items-end justify-between border-t border-border/70 pt-4"><div><p className="text-[10px] font-bold uppercase tracking-[.1em] text-muted-foreground">{item.mode === 'sale' ? 'preço' : 'disponível'}</p><p className={`mt-0.5 text-lg font-black tracking-[-.05em] ${item.mode === 'donation' ? 'text-primary' : 'text-foreground'}`} data-testid={`text-listing-price-${item.id}`}>{item.mode === 'sale' ? item.price : 'Doação'}</p></div><span className="inline-flex items-center gap-1 rounded-lg bg-secondary px-2 py-1.5 text-[10px] font-extrabold text-muted-foreground"><BadgeCheck className="size-3 text-primary" /> aluno</span></div></div></article>;
+  return <article className="group overflow-hidden rounded-[24px] border border-border/80 bg-card transition-all duration-300 hover:-translate-y-1 hover:border-primary/45 hover:shadow-[0_16px_38px_hsl(var(--foreground)/.1)]" data-testid={`card-listing-${item.id}`}>
+    <Link href={`/produto/${item.id}`} className="focus-lilac block rounded-t-[24px]" aria-label={`Ver detalhes de ${item.title}`} data-testid={`link-product-image-${item.id}`}><ProductArt item={item} /></Link>
+    <div className="p-4 sm:p-5">
+      <div className="flex items-start justify-between gap-3">
+        <div className="min-w-0">
+          <h3 className="line-clamp-2 min-h-10 text-[15px] font-black leading-5 tracking-[-.035em] text-foreground" data-testid={`text-listing-title-${item.id}`}><Link href={`/produto/${item.id}`} className="focus-lilac rounded-sm hover:text-primary" data-testid={`link-product-title-${item.id}`}>{item.title}</Link></h3>
+          <p className="mt-1 text-[11px] text-muted-foreground" data-testid={`text-listing-condition-${item.id}`}>{item.condition}</p>
+          {item.size && <p className="mt-1 text-[11px] font-bold text-secondary-foreground" data-testid={`text-listing-size-${item.id}`}>Tamanho {item.size}</p>}
+        </div>
+        <button type="button" aria-label={favorite ? `Remover ${item.title} dos favoritos` : `Favoritar ${item.title}`} aria-pressed={favorite} onClick={() => toggleFavorite(item.id)} className={`focus-lilac grid size-9 shrink-0 place-items-center rounded-xl transition-all ${favorite ? 'bg-primary text-primary-foreground' : 'bg-secondary text-muted-foreground hover:bg-primary/10 hover:text-primary'}`} data-testid={`button-favorite-${item.id}`}><Heart className="size-[17px]" fill={favorite ? 'currentColor' : 'none'} /></button>
+      </div>
+      <div className="mt-4 flex items-center gap-2 text-[11px] text-muted-foreground">
+        {!item.photo && <><span className="grid size-6 place-items-center rounded-full bg-secondary text-[9px] font-black text-primary">{item.seller.split(' ').map((part) => part[0]).join('')}</span><span data-testid={`text-listing-seller-${item.id}`}>{item.seller}</span><span className="text-border">·</span></>}
+        <span data-testid={`text-listing-note-${item.id}`}>{item.note}</span>
+      </div>
+      <div className="mt-4 flex items-end justify-between border-t border-border/70 pt-4">
+        <div><p className="text-[10px] font-bold uppercase tracking-[.1em] text-muted-foreground">{item.mode === 'sale' ? 'preço' : 'disponível'}</p><p className={`mt-0.5 text-lg font-black tracking-[-.05em] ${item.mode === 'donation' ? 'text-primary' : 'text-foreground'}`} data-testid={`text-listing-price-${item.id}`}>{item.mode === 'sale' ? item.price : 'Doação'}</p></div>
+        <span className="inline-flex items-center gap-1 rounded-lg bg-secondary px-2 py-1.5 text-[10px] font-extrabold text-muted-foreground"><BadgeCheck className="size-3 text-primary" /> {item.photo ? 'Disponível' : 'aluno'}</span>
+      </div>
+    </div>
+  </article>;
+}
+
+function ProductDetailRoute({ id }: { id: string }) {
+  const [, setLocation] = useLocation();
+  const { favorites, toggleFavorite } = useMarketplace();
+  const item = listings.find((listing) => listing.id === id);
+  const favorite = item ? favorites.includes(item.id) : false;
+
+  if (!item) {
+    return <MarketplaceShell><div className="mx-auto max-w-[720px] py-12 text-center" data-testid="page-product-not-found"><h1 className="text-2xl font-black text-foreground">Produto não encontrado.</h1><Link href="/vendas" className="focus-lilac mt-5 inline-flex items-center gap-2 rounded-xl bg-primary px-4 py-3 text-xs font-black text-primary-foreground" data-testid="link-product-not-found-back"><ArrowRight className="size-4 rotate-180" /> Voltar para Vendas</Link></div></MarketplaceShell>;
+  }
+
+  return (
+    <MarketplaceShell>
+      <div className="animate-rise" data-testid={`page-product-detail-${item.id}`}>
+        <Link href={item.mode === 'sale' ? '/vendas' : '/doacoes'} className="focus-lilac mb-6 inline-flex items-center gap-2 rounded-xl px-2 py-2 text-xs font-extrabold text-muted-foreground transition-colors hover:text-primary" data-testid="link-back-to-listings"><ArrowRight className="size-4 rotate-180" /> Voltar para {item.mode === 'sale' ? 'Vendas' : 'Doações'}</Link>
+        <div className="grid gap-5 lg:grid-cols-[1.05fr_.95fr]">
+          <div className="flex min-h-[320px] items-center justify-center overflow-hidden rounded-3xl border border-border bg-[#17131f] p-3 sm:min-h-[460px]">
+            {item.photo ? <img src={item.photo} alt={item.title} className="max-h-[620px] w-full object-contain" data-testid={`image-product-detail-${item.id}`} /> : <ProductArt item={item} />}
+          </div>
+          <section className="rounded-3xl border border-border bg-card p-5 sm:p-8">
+            <p className="font-mono text-[10px] uppercase tracking-[.16em] text-primary" data-testid="text-product-detail-category">{item.category}</p>
+            <h1 className="mt-3 text-[clamp(2rem,5vw,3.6rem)] font-black leading-[.98] tracking-[-.075em] text-foreground" data-testid="text-product-detail-name">{item.title}</h1>
+            <p className="mt-5 text-3xl font-black tracking-[-.06em] text-foreground" data-testid="text-product-detail-price">{item.mode === 'sale' ? item.price : 'Doação'}</p>
+            <div className="mt-6 grid gap-3 sm:grid-cols-2">
+              <div className="rounded-2xl bg-secondary p-4"><p className="text-[10px] font-bold uppercase tracking-[.1em] text-muted-foreground">Condição</p><p className="mt-1 text-sm font-black text-foreground" data-testid="text-product-detail-condition">{item.condition}</p></div>
+              {item.size && <div className="rounded-2xl bg-secondary p-4"><p className="text-[10px] font-bold uppercase tracking-[.1em] text-muted-foreground">Tamanho</p><p className="mt-1 text-sm font-black text-foreground" data-testid="text-product-detail-size">{item.size}</p></div>}
+            </div>
+            <p className="mt-5 text-sm leading-6 text-muted-foreground" data-testid="text-product-detail-description">{item.photo ? 'Disponível para venda no marketplace Pass On.' : item.note}</p>
+            {item.photo && <p className="mt-3 inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/[.08] px-3 py-2 text-xs font-extrabold text-primary" data-testid="status-product-availability"><BadgeCheck className="size-4" /> Disponível para venda</p>}
+            <button type="button" onClick={() => toggleFavorite(item.id)} aria-pressed={favorite} className={`focus-lilac mt-7 flex h-12 w-full items-center justify-center gap-2 rounded-xl border text-sm font-black transition-colors ${favorite ? 'border-primary bg-primary text-primary-foreground' : 'border-border bg-background text-foreground hover:border-primary/40 hover:text-primary'}`} data-testid="button-product-detail-favorite"><Heart className="size-4" fill={favorite ? 'currentColor' : 'none'} />{favorite ? 'Remover dos favoritos' : 'Adicionar aos favoritos'}</button>
+            <button type="button" onClick={() => setLocation(item.mode === 'sale' ? '/vendas' : '/doacoes')} className="focus-lilac mt-3 flex h-12 w-full items-center justify-center gap-2 rounded-xl bg-primary text-sm font-black text-primary-foreground transition-colors hover:bg-[#38156b]" data-testid="button-product-detail-back-to-market">Continuar explorando <ArrowRight className="size-4" /></button>
+          </section>
+        </div>
+      </div>
+    </MarketplaceShell>
+  );
 }
 
 function SearchField({ value, onChange, onSubmit, className = '' }: { value: string; onChange: (value: string) => void; onSubmit?: () => void; className?: string }) {
@@ -382,7 +470,7 @@ function ProfileRoute() {
 
 function Router() {
   const [location] = useLocation();
-  return <ErrorBoundary resetKey={location}><Switch><Route path="/" component={Login} /><Route path="/inicio" component={HomeRoute} /><Route path="/vendas" component={SalesRoute} /><Route path="/doacoes" component={DonationsRoute} /><Route path="/explorar" component={ExploreRoute} /><Route path="/achados-e-perdidos" component={LostFoundRoute} /><Route path="/publicar" component={PublishRoute} /><Route path="/favoritos" component={FavoritesRoute} /><Route path="/perfil" component={ProfileRoute} /><Route component={NotFound} /></Switch></ErrorBoundary>;
+  return <ErrorBoundary resetKey={location}><Switch><Route path="/" component={Login} /><Route path="/inicio" component={HomeRoute} /><Route path="/vendas" component={SalesRoute} /><Route path="/doacoes" component={DonationsRoute} /><Route path="/produto/:id">{(params) => <ProductDetailRoute id={params.id} />}</Route><Route path="/explorar" component={ExploreRoute} /><Route path="/achados-e-perdidos" component={LostFoundRoute} /><Route path="/publicar" component={PublishRoute} /><Route path="/favoritos" component={FavoritesRoute} /><Route path="/perfil" component={ProfileRoute} /><Route component={NotFound} /></Switch></ErrorBoundary>;
 }
 
 function App() {
