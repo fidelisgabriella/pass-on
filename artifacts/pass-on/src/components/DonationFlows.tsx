@@ -39,8 +39,17 @@ function imageUrl(path: string) {
   return path.startsWith('/objects/') ? `/api/storage${path}` : path;
 }
 
-function FlowShell({ children, title = 'Pass On' }: { children: ReactNode; title?: string }) {
-  const { logout } = useAuth();
+function FlowShell({ children, title = 'Pass On', requireProfile = true }: { children: ReactNode; title?: string; requireProfile?: boolean }) {
+  const { logout, isAuthenticated, isLoading } = useAuth();
+  const [location, setLocation] = useLocation();
+  const profileQuery = useGetStudentProfile({ query: { enabled: isAuthenticated, queryKey: getGetStudentProfileQueryKey() } });
+  useEffect(() => {
+    if (!isLoading && !isAuthenticated) setLocation('/');
+    else if (requireProfile && isAuthenticated && !profileQuery.isLoading && !profileQuery.data?.profile) setLocation('/cadastro');
+  }, [isAuthenticated, isLoading, profileQuery.data, profileQuery.isLoading, requireProfile, setLocation]);
+  if (isLoading || (isAuthenticated && profileQuery.isLoading) || !isAuthenticated || (requireProfile && !profileQuery.data?.profile)) {
+    return <main className="grid min-h-[100dvh] place-items-center bg-background px-5 text-center" data-testid="status-donation-auth"><p className="text-sm font-bold text-muted-foreground">Preparando seu espaço no Pass On...</p></main>;
+  }
   return <main className="app-noise min-h-[100dvh] bg-background pb-28" data-testid="donation-flow-shell">
     <header className="sticky top-0 z-30 border-b border-border/80 bg-background/95 backdrop-blur-md">
       <div className="mx-auto flex h-[72px] max-w-[1200px] items-center justify-between px-5 sm:px-8">
@@ -84,7 +93,7 @@ function DonationCard({ donation }: { donation: Donation }) {
       </div>
     </Link>
     <div className="p-4 sm:p-5">
-      <p className="text-[10px] font-bold uppercase tracking-[.12em] text-primary">doação · gratuita</p>
+      <p className="text-[10px] font-black uppercase tracking-[.12em] text-primary">GRATUITO</p>
       <h2 className="mt-2 line-clamp-2 min-h-10 text-base font-black leading-5 tracking-[-.04em] text-foreground"><Link href={`/doacao/${donation.id}`} className="focus-lilac rounded-sm hover:text-primary">{donation.title}</Link></h2>
       <div className="mt-3 flex flex-wrap gap-2 text-[11px] text-muted-foreground"><span>{donation.size || 'Tamanho: Não informado'}</span><span>·</span><span>{donation.condition || 'Condição: Não informado'}</span></div>
       <div className="mt-4 flex items-center justify-between border-t border-border/70 pt-4"><StatePill status={donation.status} /><span className="text-[11px] text-muted-foreground">{donation.interestCount} interessados</span></div>
@@ -176,8 +185,13 @@ export function NewDonationRoute() {
     if (!file || !title || title.length < 2 || !condition || condition.length < 2 || !categories.includes(category)) { setError('Inclua uma foto, um nome, uma categoria e a condição do item.'); return; }
     setError('');
     try {
-      const requested = await uploadUrl.mutateAsync({ data: { name: file.name, size: file.size, contentType: file.type || 'application/octet-stream' } });
-      const response = await fetch(requested.uploadURL, { method: 'PUT', headers: { 'Content-Type': file.type || 'application/octet-stream' }, body: file });
+      const allowedTypes = ['image/jpeg', 'image/png', 'image/webp'];
+      if (!allowedTypes.includes(file.type) || file.size > 10 * 1024 * 1024) {
+        setError('Use uma imagem JPG, PNG ou WebP de até 10 MB.');
+        return;
+      }
+      const requested = await uploadUrl.mutateAsync({ data: { name: file.name, size: file.size, contentType: file.type } });
+      const response = await fetch(requested.uploadURL, { method: 'PUT', headers: { 'Content-Type': file.type }, body: file });
       if (!response.ok) throw new Error('Falha ao enviar a imagem.');
       await createDonation.mutateAsync({ data: { title, category, description: String(form.get('description') || '').trim() || null, size: String(form.get('size') || '').trim() || null, condition, imagePath: requested.objectPath } });
       await Promise.all([queryClient.invalidateQueries({ queryKey: getListMyDonationsQueryKey() }), queryClient.invalidateQueries({ queryKey: getListDonationsQueryKey() })]);
@@ -189,8 +203,8 @@ export function NewDonationRoute() {
   return <FlowShell title="Nova doação"><Heading eyebrow="passe adiante" title="Nova doação" description="Compartilhe um item em bom estado. Toda publicação aguarda aprovação antes de aparecer para a comunidade." />
     {authLoading ? <div className="h-64 animate-pulse rounded-3xl bg-secondary" /> : isAuthenticated && <form onSubmit={submit} className="grid gap-5 lg:grid-cols-[.85fr_1.15fr]" data-testid="form-new-donation" noValidate>
       <label className="focus-lilac relative flex min-h-[300px] cursor-pointer flex-col items-center justify-center overflow-hidden rounded-3xl border border-dashed border-primary/45 bg-card p-5 text-center transition-colors hover:bg-primary/[.04]">
-        {preview ? <img src={preview} alt="Prévia do item" className="absolute inset-0 size-full object-contain bg-[#17131f]" data-testid="preview-donation-image" /> : <><span className="grid size-14 place-items-center rounded-2xl bg-secondary text-primary"><ImagePlus className="size-6" /></span><span className="mt-4 text-sm font-black">Adicione uma foto</span><span className="mt-1 text-xs text-muted-foreground">JPG, PNG ou outro formato de imagem</span></>}
-        <input type="file" accept="image/*" className="sr-only" onChange={(event) => { setFile(event.target.files?.[0] ?? null); setError(''); }} data-testid="input-donation-photo" />
+        {preview ? <img src={preview} alt="Prévia do item" className="absolute inset-0 size-full object-contain bg-[#17131f]" data-testid="preview-donation-image" /> : <><span className="grid size-14 place-items-center rounded-2xl bg-secondary text-primary"><ImagePlus className="size-6" /></span><span className="mt-4 text-sm font-black">Adicione uma foto</span><span className="mt-1 text-xs text-muted-foreground">JPG, PNG ou WebP · até 10 MB</span></>}
+        <input type="file" accept="image/jpeg,image/png,image/webp" className="sr-only" onChange={(event) => { setFile(event.target.files?.[0] ?? null); setError(''); }} data-testid="input-donation-photo" />
         {preview && <span className="absolute bottom-3 right-3 inline-flex items-center gap-2 rounded-xl bg-background/90 px-3 py-2 text-xs font-extrabold"><Upload className="size-3.5" />Trocar foto</span>}
       </label>
       <div className="rounded-3xl border border-border bg-card p-5 sm:p-7">
@@ -276,11 +290,11 @@ export function RegisterRoute() {
       setLocation('/inicio');
     } catch { setError('Não foi possível salvar seus dados. Confira as informações e tente novamente.'); }
   }
-  return <FlowShell title="Cadastro"><div className="mx-auto max-w-[570px]"><Heading eyebrow="um espaço da sua escola" title="Seu cadastro" description="Conte como prefere ser chamado e informe seu RA para confirmar que faz parte da comunidade. O RA não aparece no seu perfil." />
+  return <FlowShell title="Cadastro" requireProfile={false}><div className="mx-auto max-w-[570px]"><Heading eyebrow="um espaço da sua escola" title="Seu cadastro" description="Informe seu nome para exibição e seu RA como informação de cadastro. Ele não é usado como senha nem confirma vínculo escolar." />
     <form onSubmit={submit} className="rounded-3xl border border-border bg-card p-5 sm:p-8" data-testid="form-student-registration" noValidate>
       <label className="mb-5 block text-xs font-extrabold">Nome para exibição<input name="displayName" minLength={2} maxLength={100} required placeholder="Como os outros alunos vão te chamar" className="focus-lilac mt-2 h-12 w-full rounded-xl border border-border bg-background px-4 text-sm outline-none focus:border-primary" data-testid="input-student-display-name" /></label>
       <label className="block text-xs font-extrabold">RA <input name="ra" maxLength={64} required placeholder="Seu registro acadêmico" autoComplete="off" className="focus-lilac mt-2 h-12 w-full rounded-xl border border-border bg-background px-4 text-sm outline-none focus:border-primary" data-testid="input-student-ra" /></label>
-      <p className="mt-3 text-xs leading-5 text-muted-foreground">Seu RA é usado apenas para validar o cadastro e não será exibido no Pass On.</p>
+      <p className="mt-3 text-xs leading-5 text-muted-foreground">Seu RA é uma informação do cadastro, não é uma senha e não será exibido no Pass On. Este ambiente demonstrativo não valida vínculo escolar.</p>
       {error && <p className="mt-4 rounded-xl bg-destructive/10 p-3 text-xs text-destructive" role="alert" data-testid="error-student-registration">{error}</p>}
       <button disabled={saveProfile.isPending || isLoading} className="focus-lilac mt-6 flex h-12 w-full items-center justify-center gap-2 rounded-xl bg-primary text-sm font-black text-primary-foreground disabled:opacity-50" data-testid="button-save-student-profile">{saveProfile.isPending ? 'Salvando...' : <>Continuar <ArrowRight className="size-4" /></>}</button>
     </form></div></FlowShell>;
@@ -321,7 +335,7 @@ export function ProfileRoute() {
   return <FlowShell title="Perfil"><div className="mx-auto max-w-[720px]"><Heading eyebrow="seu espaço" title="Perfil" description="Suas informações e ferramentas da comunidade escolar." />
     {isLoading ? <div className="h-56 animate-pulse rounded-3xl bg-secondary" /> : isError ? <div className="rounded-3xl border border-destructive/20 bg-card p-8 text-center" data-testid="error-profile"><p className="font-black">Não foi possível carregar seu perfil.</p><button onClick={() => refetch()} className="mt-4 rounded-xl bg-primary px-4 py-2 text-xs font-black text-primary-foreground" data-testid="button-retry-profile">Tentar novamente</button></div> :
     <section className="rounded-3xl border border-border bg-card p-6 sm:p-8" data-testid="section-profile-card"><div className="flex items-center gap-4"><span className="grid size-16 place-items-center rounded-2xl bg-accent text-lg font-black text-accent-foreground"><UserRound className="size-7" /></span><div><h2 className="text-xl font-black" data-testid="text-profile-name">{profile?.displayName || 'Estudante'}</h2><p className="mt-1 text-sm text-muted-foreground">{profile?.isModerator ? 'Equipe de moderação' : 'Estudante · E. E. República do Suriname'}</p></div></div>
-      <div className="mt-7 flex flex-wrap gap-3">{profile?.isModerator && <><Link href="/moderacao/doacoes" className="focus-lilac rounded-xl bg-primary px-4 py-3 text-xs font-black text-primary-foreground" data-testid="link-profile-moderation">Moderar doações</Link><Link href="/moderador/configurar" className="focus-lilac rounded-xl border border-border px-4 py-3 text-xs font-extrabold" data-testid="link-profile-moderator-setup">Configuração de moderação</Link></>}<Link href="/minhas-doacoes" className="focus-lilac rounded-xl border border-border px-4 py-3 text-xs font-extrabold" data-testid="link-profile-my-donations">Minhas doações</Link></div>
+       <div className="mt-7 flex flex-wrap gap-3">{profile?.isModerator && <Link href="/moderacao/doacoes" className="focus-lilac rounded-xl bg-primary px-4 py-3 text-xs font-black text-primary-foreground" data-testid="link-profile-moderation">Moderar doações</Link>}<Link href="/moderador/configurar" className="focus-lilac rounded-xl border border-border px-4 py-3 text-xs font-extrabold" data-testid="link-profile-moderator-setup">{profile?.isModerator ? 'Configuração de moderação' : 'Sou responsável pela moderação'}</Link><Link href="/minhas-doacoes" className="focus-lilac rounded-xl border border-border px-4 py-3 text-xs font-extrabold" data-testid="link-profile-my-donations">Minhas doações</Link></div>
       <button type="button" onClick={() => logout()} className="focus-lilac mt-7 inline-flex items-center gap-2 rounded-xl border border-destructive/20 px-4 py-3 text-xs font-black text-destructive hover:bg-destructive/10" data-testid="button-logout-profile"><LogOut className="size-4" />Sair da conta</button>
     </section>}
   </div></FlowShell>;
